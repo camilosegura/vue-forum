@@ -12,18 +12,15 @@
         {{post.text}}
       </p>
 
-      <time class="post-date text-faded"
-            :title="post.publishedAt | humanFriendlyDate"
-      >
-        {{post.publishedAt | diffForHumans}}
-
-      </time>
+      <AppDate
+        :class="['post-date', 'text-fade']"
+        :timestamp="post.publishedAt"
+       />
     </div>
 </template>
 
 <script>
     import sourceData from '@/data'
-    import moment from 'moment'
 
     export default {
       name: 'PostListItem',
@@ -42,14 +39,6 @@
           const postIdsArray = Object.keys(postsIds)
 
           return postIdsArray.length
-        }
-      },
-      filters: {
-        humanFriendlyDate (date) {
-          return moment.unix(date).format('MMMM Do YYYY, h:mm:ss a')
-        },
-        diffForHumans (date) {
-          return moment.unix(date).fromNow()
         }
       }
     }
