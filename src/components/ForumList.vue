@@ -1,10 +1,5 @@
 <template>
-  <div class="forum-list">
-
-    <h2 class="list-title">
-        <a href="category.html">Feedback & Information</a>
-    </h2>
-
+  <div>
     <ForumListItem
       v-for="forum in forums"
       :key="forum['.key']"
