@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full">
+  <div class="col-full push-top">
     <h1>Welcome to Camilo's forum</h1>
     <CategoryList :categories="categories" />
   </div>
