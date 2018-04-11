@@ -20,8 +20,6 @@
 </template>
 
 <script>
-    import sourceData from '@/data'
-
     export default {
       name: 'PostListItem',
       props: {
@@ -32,7 +30,7 @@
       },
       computed: {
         users () {
-          return sourceData.users[this.post.userId]
+          return this.$store.state.users[this.post.userId]
         },
         userPostsCount () {
           const postsIds = this.users.posts

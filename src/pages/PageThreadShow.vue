@@ -9,14 +9,12 @@
 
     <PostList :posts="posts" />
     <PostEditor
-      @save="add"
       :threadId="id"
     />
   </article>
 </template>
 
 <script>
-  import sourceData from '@/data'
   import PostList from '@/components/PostList'
   import PostEditor from '@/components/PostEditor'
 
@@ -34,24 +32,12 @@
     computed: {
       posts () {
         const postIds = Object.values(this.thread.posts)
-        const postsArray = Object.values(sourceData.posts)
+        const postsArray = Object.values(this.$store.state.posts)
           .filter(post => postIds.includes(post['.key']))
         return postsArray
-      }
-    },
-    methods: {
-      add (eventData) {
-        const postId = eventData.post['.key']
-        const post = eventData.post
-
-        this.$set(sourceData.posts, postId, post)
-        this.$set(this.thread.posts, postId, postId)
-        this.$set(sourceData.users[post.userId].posts, postId, postId)
-      }
-    },
-    data () {
-      return {
-        thread: sourceData.threads[this.id]
+      },
+      thread () {
+        return this.$store.state.threads[this.id]
       }
     }
   }
