@@ -20,26 +20,25 @@
 </template>
 
 <script>
-    export default {
-      name: 'PostListItem',
-      props: {
-        post: {
-          required: true,
-          type: Object
-        }
-      },
-      computed: {
-        users () {
-          return this.$store.state.users[this.post.userId]
-        },
-        userPostsCount () {
-          const postsIds = this.users.posts
-          const postIdsArray = Object.keys(postsIds)
+  import { countObjectProperties } from '@/utils'
 
-          return postIdsArray.length
-        }
+  export default {
+    name: 'PostListItem',
+    props: {
+      post: {
+        required: true,
+        type: Object
+      }
+    },
+    computed: {
+      users () {
+        return this.$store.state.users[this.post.userId]
+      },
+      userPostsCount () {
+        return countObjectProperties(this.users.posts)
       }
     }
+  }
 </script>
 
 <style scoped>
