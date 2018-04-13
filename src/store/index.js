@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     createPost (context, post) {
       const postId = 'greatPost' + Math.random()
       post['.key'] = postId
+      post.userId = context.state.authId
 
       context.commit('setPost', {postId, post})
       context.commit('appendPostToThread', {postId, threadId: post.threadId})
@@ -25,6 +26,29 @@ const store = new Vuex.Store({
     },
     updateUser (context, user) {
       context.commit('setUser', {userId: user['.key'], user})
+    },
+    createThread (context, {title, text, forumId}) {
+      const publishedAt = Math.floor(Date.now() / 1000)
+      const userId = context.state.authId
+      const threadId = 'greatThread' + Math.random()
+      const post = {
+        text: text,
+        publishedAt,
+        threadId: threadId
+      }
+
+      const thread = {
+        '.key': threadId,
+        title,
+        forumId,
+        publishedAt,
+        userId
+      }
+
+      context.commit('setThread', {threadId, thread})
+      context.dispatch('createPost', post)
+      context.commit('appendThreadToForum', {forumId, threadId})
+      context.commit('appendThreadToUser', {userId, threadId})
     }
   },
   mutations: {
@@ -34,11 +58,44 @@ const store = new Vuex.Store({
     setUser (state, {userId, user}) {
       Vue.set(state.users, userId, user)
     },
+    setThread (state, {threadId, thread}) {
+      Vue.set(state.threads, threadId, thread)
+    },
     appendPostToThread (state, {postId, threadId}) {
-      Vue.set(state.threads[threadId].posts, postId, postId)
+      const thread = state.threads[threadId]
+
+      if (!thread.posts) {
+        Vue.set(thread, 'posts', {})
+      }
+
+      Vue.set(thread.posts, postId, postId)
     },
     appendPostToUser (state, {postId, userId}) {
-      Vue.set(state.users[userId].posts, postId, postId)
+      const user = state.users[userId]
+
+      if (!user.posts) {
+        Vue.set(user, 'posts', {})
+      }
+
+      Vue.set(user.posts, postId, postId)
+    },
+    appendThreadToForum (state, {forumId, threadId}) {
+      const forum = state.forums[forumId]
+
+      if (!forum.threads) {
+        Vue.set(forum, 'threads', {})
+      }
+
+      Vue.set(forum.threads, threadId, threadId)
+    },
+    appendThreadToUser (state, {userId, threadId}) {
+      const user = state.users[userId]
+
+      if (!user.threads) {
+        Vue.set(user, 'threads', {})
+      }
+
+      Vue.set(user.threads, threadId, threadId)
     }
   }
 })

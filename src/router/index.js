@@ -6,6 +6,7 @@ import NotFound from '@/pages/PageNotfound'
 import Forum from '@/pages/PageForum'
 import Category from '@/pages/PageCategory'
 import Profile from '@/pages/PageProfile'
+import ThreadCreate from '@/pages/PageThreadCreate'
 
 Vue.use(Router)
 
@@ -15,6 +16,12 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: PageHome
+    },
+    {
+      path: '/thread/create',
+      name: 'ThreadCreate',
+      component: ThreadCreate,
+      props: true
     },
     {
       path: '/thread/:id',
