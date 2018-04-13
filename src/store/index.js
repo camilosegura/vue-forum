@@ -28,27 +28,31 @@ const store = new Vuex.Store({
       context.commit('setUser', {userId: user['.key'], user})
     },
     createThread (context, {title, text, forumId}) {
-      const publishedAt = Math.floor(Date.now() / 1000)
-      const userId = context.state.authId
-      const threadId = 'greatThread' + Math.random()
-      const post = {
-        text: text,
-        publishedAt,
-        threadId: threadId
-      }
+      return new Promise((resolve, reject) => {
+        const publishedAt = Math.floor(Date.now() / 1000)
+        const userId = context.state.authId
+        const threadId = 'greatThread' + Math.random()
+        const post = {
+          text: text,
+          publishedAt,
+          threadId: threadId
+        }
 
-      const thread = {
-        '.key': threadId,
-        title,
-        forumId,
-        publishedAt,
-        userId
-      }
+        const thread = {
+          '.key': threadId,
+          title,
+          forumId,
+          publishedAt,
+          userId
+        }
 
-      context.commit('setThread', {threadId, thread})
-      context.dispatch('createPost', post)
-      context.commit('appendThreadToForum', {forumId, threadId})
-      context.commit('appendThreadToUser', {userId, threadId})
+        context.commit('setThread', {threadId, thread})
+        context.dispatch('createPost', post)
+        context.commit('appendThreadToForum', {forumId, threadId})
+        context.commit('appendThreadToUser', {userId, threadId})
+
+        resolve(context.state.threads[threadId])
+      })
     }
   },
   mutations: {
