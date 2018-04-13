@@ -23,6 +23,8 @@ const store = new Vuex.Store({
       context.commit('setPost', {postId, post})
       context.commit('appendPostToThread', {postId, threadId: post.threadId})
       context.commit('appendPostToUser', {postId, userId: post.userId})
+
+      return Promise.resolve(context.state.psots[postId])
     },
     updateUser (context, user) {
       context.commit('setUser', {userId: user['.key'], user})
@@ -48,6 +50,9 @@ const store = new Vuex.Store({
 
         context.commit('setThread', {threadId, thread})
         context.dispatch('createPost', post)
+          .then(post => {
+            context.commit('setThread', {threadId, thread: {...thread, firstPostId: post['.key']}})
+          })
         context.commit('appendThreadToForum', {forumId, threadId})
         context.commit('appendThreadToUser', {userId, threadId})
 
