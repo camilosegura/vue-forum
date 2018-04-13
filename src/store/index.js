@@ -53,6 +53,20 @@ const store = new Vuex.Store({
 
         resolve(context.state.threads[threadId])
       })
+    },
+    updateThread (context, {title, text, id}) {
+      return new Promise((resolve, reject) => {
+        const thread = context.state.threads[id]
+        const post = context.state.posts[thread.firstPostId]
+
+        const newThread = {...thread, title}
+        const newPost = {...post, text}
+
+        context.commit('setThread', {threadId: id, thread: newThread})
+        context.commit('setPost', {postId: thread.firstPostId, post: newPost})
+
+        resolve(newThread)
+      })
     }
   },
   mutations: {
